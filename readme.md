@@ -9,7 +9,12 @@
 Requisitos:
 
 * Selenium
+
+`pip install selenium`
+
 * openpyxl
+
+`pip install openpyxl`
 
 ---
 
