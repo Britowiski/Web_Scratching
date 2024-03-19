@@ -1,0 +1,2 @@
+user:seu email de login sem espaço
+senha:sua senha do linkedin
