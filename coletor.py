@@ -5,6 +5,7 @@ from time import sleep
 from tkinter import Tk, Label, Entry, Button, messagebox
 from threading import Thread
 from openpyxl import Workbook
+from selenium.webdriver.chrome.service import Service
 
 def start_job_search():
     search_query = job_entry.get()
@@ -33,26 +34,37 @@ def loading_screen():
     loading_window.mainloop()
 
 def job_search(search_query, location_query, email, password):
+    print("Abrindo o navegador...")
+    service = Service('C:/Users/wende/AppData/Local/Programs/Python/Python312/chrome-win64/chrome.exe')
+
+    # Configure as opções do Chrome
     options = webdriver.ChromeOptions()
     options.add_argument('headless')  # Executar o navegador em modo oculto
 
-    browser = webdriver.Chrome(executable_path='C:/Users/wende/Downloads/chomedriver/chromedriver-win64/chromedriver.exe', options=options)
- #Web options
+    # Inicialize o driver do Chrome
+    print("Inicializando o navegador...")
+    browser = webdriver.Chrome(service=service, options=options)
+    print("Navegador inicializado.")
 
+    print("Acessando o LinkedIn...")
     browser.get("https://www.linkedin.com/")
     sleep(5)
     email_field = browser.find_element(By.XPATH, "//*[@id='session_key']")
     password_field = browser.find_element(By.XPATH, "//*[@id='session_password']")
     login_button = browser.find_element(By.XPATH, "//*[@id='main-content']/section[1]/div/div/form/div[2]/button")
     sleep(2)
+    print("Realizando login...")
     email_field.send_keys(email)
     password_field.send_keys(password)
     sleep(2)
     login_button.click()
     sleep(4)
+
+    print("Acessando a página de vagas...")
     browser.get("https://www.linkedin.com/jobs")
     input_jobs_search = browser.find_element(By.XPATH, "//header//input")
     sleep(2)
+    print("Realizando busca de vagas...")
     input_jobs_search.send_keys(f"{search_query}, {location_query}")
     sleep(2)
     input_jobs_search.send_keys(Keys.ENTER)
